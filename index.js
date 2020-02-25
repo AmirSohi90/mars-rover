@@ -159,6 +159,7 @@ window.addEventListener("load", () => {
 
   button.addEventListener("click", () => {
     const gridSize = getGridSize(gridSizeInput.value);
+
     const dronePosition = getStartingPosition(
       startingPositionInput.value,
       gridSize
