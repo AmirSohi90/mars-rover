@@ -54,6 +54,78 @@ const getStartingDirection = startingDirectionInput => {
     : "N";
 };
 
+const getDroneStatus = (coordinates, gridCondition) =>
+  coordinates === gridCondition ? "LOST" : "";
+
+const getDroneCoordinate = (coordinates, gridCondition, numericalIncrement) =>
+  coordinates === gridCondition
+    ? coordinates
+    : coordinates + numericalIncrement;
+
+const moveDroneForward = (droneDirection, droneCoordinates, gridSize) => {
+  const initialYCoordinate = droneCoordinates.y;
+  const initalXCoordinate = droneCoordinates.x;
+
+  switch (droneDirection) {
+    case "N":
+      return {
+        ...droneCoordinates,
+        y: getDroneCoordinate(initialYCoordinate, gridSize.y, 1),
+        status: getDroneStatus(initialYCoordinate, gridSize.y)
+      };
+    case "E":
+      return {
+        ...droneCoordinates,
+        x: getDroneCoordinate(initalXCoordinate, gridSize.x, 1),
+        status: getDroneStatus(initalXCoordinate, gridSize.x)
+      };
+    case "S":
+      return {
+        ...droneCoordinates,
+        y: getDroneCoordinate(initialYCoordinate, 0, -1),
+        status: getDroneStatus(initialYCoordinate, 0)
+      };
+    case "W":
+      return {
+        ...droneCoordinates,
+        x: getDroneCoordinate(initalXCoordinate, 0, -1),
+        status: getDroneStatus(initalXCoordinate, 0)
+      };
+  }
+};
+
+const rotateDrone = (commandInput, currentDirection) =>
+  AVAILABLE_DIRECTIONS[currentDirection][commandInput];
+
+const moveDrone = (commands, startingPositon, startingDirection, gridSize) => {
+  const dronePosition = commands.reduce(
+    (droneCoordinates, command) => {
+      if (status === "LOST") return droneCoordinates;
+
+      return command === "F"
+        ? moveDroneForward(
+            droneCoordinates.direction,
+            droneCoordinates,
+            gridSize
+          )
+        : {
+            ...droneCoordinates,
+            direction: rotateDrone(command, droneCoordinates.direction)
+          };
+    },
+    {
+      x: startingPositon.x,
+      y: startingPositon.y,
+      direction: startingDirection,
+      status: ""
+    }
+  );
+
+  return `${dronePosition.x} ${dronePosition.y} ${dronePosition.direction}${
+    Boolean(dronePosition.status) ? ` ${dronePosition.status}` : ""
+  }`;
+};
+
 const getCommands = commandsInput =>
   Boolean(commandsInput)
     ? commandsInput
@@ -81,11 +153,14 @@ window.addEventListener("load", () => {
 
     const commandsInput = getCommands(commandsInputTest.value);
 
-    console.log("GRID SIZE", gridSize);
-    console.log("DRONE POSITION", dronePosition);
-    console.log("DRONE DIRECTION", droneDirection);
-    console.log("COMMANDS INPUT", commandsInput);
-    console.log("ROVER POSITION", roverPosition);
+    const output = moveDrone(
+      commandsInput,
+      dronePosition,
+      droneDirection,
+      gridSize
+    );
+
+    roverPosition.innerHTML = `Rover Position: ${output}`;
   });
 });
 
@@ -94,5 +169,10 @@ module.exports = {
   getGridSize,
   getStartingPosition,
   getStartingDirection,
-  getCommands
+  getCommands,
+  getDroneStatus,
+  getDroneCoordinate,
+  rotateDrone,
+  moveDroneForward,
+  moveDrone
 };

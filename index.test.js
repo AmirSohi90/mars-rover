@@ -89,3 +89,96 @@ describe("getCommands", () => {
     expect(index.getCommands()).toEqual([]);
   });
 });
+
+describe("getDroneStatus", () => {
+  it("should return the correct drone status", () => {
+    expect(index.getDroneStatus(20, 30)).toBe("");
+    expect(index.getDroneStatus(20, 20)).toBe("LOST");
+  });
+});
+
+describe("getDroneCoordinate", () => {
+  it("should return the correct drone coordinate", () => {
+    expect(index.getDroneCoordinate(20, 21, 1)).toBe(21);
+    expect(index.getDroneCoordinate(20, 20, 1)).toBe(20);
+    expect(index.getDroneCoordinate(18, 19, -1)).toBe(17);
+    expect(index.getDroneCoordinate(19, 19, -1)).toBe(19);
+  });
+});
+
+describe("moveDroneForward", () => {
+  it("should return the correct position and status", () => {
+    expect(
+      index.moveDroneForward("N", { x: 2, y: 5 }, { x: 6, y: 6 })
+    ).toEqual({ x: 2, y: 6, status: "" });
+    expect(
+      index.moveDroneForward("N", { x: 2, y: 5 }, { x: 6, y: 5 })
+    ).toEqual({ x: 2, y: 5, status: "LOST" });
+
+    expect(
+      index.moveDroneForward("E", { x: 2, y: 5 }, { x: 3, y: 5 })
+    ).toEqual({ x: 3, y: 5, status: "" });
+    expect(
+      index.moveDroneForward("E", { x: 2, y: 5 }, { x: 2, y: 5 })
+    ).toEqual({ x: 2, y: 5, status: "LOST" });
+
+    expect(
+      index.moveDroneForward("S", { x: 2, y: 5 }, { x: 2, y: 6 })
+    ).toEqual({ x: 2, y: 4, status: "" });
+    expect(
+      index.moveDroneForward("S", { x: 2, y: 0 }, { x: 2, y: 6 })
+    ).toEqual({ x: 2, y: 0, status: "LOST" });
+
+    expect(
+      index.moveDroneForward("W", { x: 2, y: 5 }, { X: 5, Y: 5 })
+    ).toEqual({ x: 1, y: 5, status: "" });
+    expect(
+      index.moveDroneForward("W", { x: 0, y: 5 }, { X: 5, Y: 5 })
+    ).toEqual({ x: 0, y: 5, status: "LOST" });
+  });
+});
+
+describe("rotateDrone", () => {
+  it("should get the correct direction when rotating left", () => {
+    expect(index.rotateDrone("L", "N")).toBe("W");
+    expect(index.rotateDrone("L", "E")).toBe("N");
+    expect(index.rotateDrone("L", "S")).toBe("E");
+    expect(index.rotateDrone("L", "W")).toBe("S");
+  });
+
+  it("should get the correct direction when rotating right", () => {
+    expect(index.rotateDrone("R", "N")).toBe("E");
+    expect(index.rotateDrone("R", "E")).toBe("S");
+    expect(index.rotateDrone("R", "S")).toBe("W");
+    expect(index.rotateDrone("R", "W")).toBe("N");
+  });
+});
+
+describe("moveDrone", () => {
+  it("should output the right coordinates and the status if lost", () => {
+    expect(
+      index.moveDrone(
+        ["R", "F", "R", "F", "R", "F", "R", "F"],
+        { x: 1, y: 1 },
+        "E",
+        { x: 5, y: 3 }
+      )
+    ).toBe("1 1 E");
+    expect(
+      index.moveDrone(
+        ["F", "R", "R", "F", "L", "L", "F", "F", "R", "R", "F", "L", "L"],
+        { x: 3, y: 2 },
+        "N",
+        { x: 50, y: 50 }
+      )
+    ).toBe("3 3 N");
+    expect(
+      index.moveDrone(
+        ["L", "L", "F", "F", "F", "L", "F", "L", "F", "L"],
+        { x: 0, y: 3 },
+        "W",
+        { x: 50, y: 50 }
+      )
+    ).toBe("2 4 S");
+  });
+});
