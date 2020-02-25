@@ -6,13 +6,13 @@ The pdf document said to not have crazy steps to run code so hopefully the below
 <br>
 
 I used the latest version of node for this
-<br>
+<br><br>
 In CLI install depencies with npm/yarn
-<br>
-To start run npm start or yarn start
-<br>
-To run tests run npm start or yarn start
-<br>
+<br><br>
+To start type in CLI npm run start or yarn start
+<br><br>
+To run tests type in CLI npm run start or yarn start
+<br><br>
 Please note that I didn't include webpack/babel in this so it's best to run via Chrome
 
 # Comments on Code

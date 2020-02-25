@@ -12,8 +12,8 @@ const splitInput = input => input.split(" ").map(Number);
 const getGridSize = gridSizeInput => {
   const grid = Boolean(gridSizeInput) ? splitInput(gridSizeInput) : [50, 50];
 
-  const x = Boolean(grid) && grid[0] <= 51 && grid[0] >= 0 ? grid[0] : 50;
-  const y = Boolean(grid) && grid[1] <= 51 && grid[1] >= 0 ? grid[1] : 50;
+  const x = Boolean(grid) && grid[0] < 51 && grid[0] >= 0 ? grid[0] : 50;
+  const y = Boolean(grid) && grid[1] < 51 && grid[1] >= 0 ? grid[1] : 50;
 
   return {
     x,
@@ -159,7 +159,7 @@ window.addEventListener("load", () => {
 
   button.addEventListener("click", () => {
     const gridSize = getGridSize(gridSizeInput.value);
-
+    console.log(gridSize);
     const dronePosition = getStartingPosition(
       startingPositionInput.value,
       gridSize
