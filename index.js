@@ -62,6 +62,33 @@ const getCommands = commandsInput =>
         .filter(command => COMMANDS.includes(command))
     : [];
 
+window.addEventListener("load", () => {
+  const gridSizeInput = document.getElementById("grid-size");
+  const startingPositionInput = document.getElementById("starting-position");
+  const commandsInputTest = document.getElementById("commands");
+  const button = document.getElementById("submit-button");
+  const roverPosition = document.getElementById("rover-position");
+
+  button.addEventListener("click", () => {
+    const gridSize = getGridSize(gridSizeInput.value);
+
+    const dronePosition = getStartingPosition(
+      startingPositionInput.value,
+      gridSize
+    );
+
+    const droneDirection = getStartingDirection(startingPositionInput.value);
+
+    const commandsInput = getCommands(commandsInputTest.value);
+
+    console.log("GRID SIZE", gridSize);
+    console.log("DRONE POSITION", dronePosition);
+    console.log("DRONE DIRECTION", droneDirection);
+    console.log("COMMANDS INPUT", commandsInput);
+    console.log("ROVER POSITION", roverPosition);
+  });
+});
+
 module.exports = {
   splitInput,
   getGridSize,
