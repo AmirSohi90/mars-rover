@@ -12,6 +12,8 @@ In CLI install depencies with npm/yarn
 To start run npm start or yarn start
 <br>
 To run tests run npm start or yarn start
+<br>
+Please note that I didn't include webpack/babel in this so it's best to run via Chrome
 
 # Comments on Code
 
