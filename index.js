@@ -1,10 +1,10 @@
 const COMMANDS = ["F", "R", "L"];
 
 const AVAILABLE_DIRECTIONS = {
-  N: { R: "E", L: "W" },
-  E: { R: "S", L: "N" },
-  S: { R: "W", L: "E" },
-  W: { R: "N", L: "S" }
+  N: { R: "E", L: "W", incrementValue: 1 },
+  E: { R: "S", L: "N", incrementValue: 1 },
+  S: { R: "W", L: "E", incrementValue: -1 },
+  W: { R: "N", L: "S", incrementValue: -1 }
 };
 
 const splitInput = input => input.split(" ").map(Number);
@@ -12,8 +12,8 @@ const splitInput = input => input.split(" ").map(Number);
 const getGridSize = gridSizeInput => {
   const grid = Boolean(gridSizeInput) ? splitInput(gridSizeInput) : [50, 50];
 
-  const x = Boolean(grid) && grid[0] < 51 && grid[0] >= 0 ? grid[0] : 50;
-  const y = Boolean(grid) && grid[1] < 51 && grid[1] >= 0 ? grid[1] : 50;
+  const x = Boolean(grid) && grid[0] <= 51 && grid[0] >= 0 ? grid[0] : 50;
+  const y = Boolean(grid) && grid[1] <= 51 && grid[1] >= 0 ? grid[1] : 50;
 
   return {
     x,
@@ -70,25 +70,41 @@ const moveDroneForward = (droneDirection, droneCoordinates, gridSize) => {
     case "N":
       return {
         ...droneCoordinates,
-        y: getDroneCoordinate(initialYCoordinate, gridSize.y, 1),
+        y: getDroneCoordinate(
+          initialYCoordinate,
+          gridSize.y,
+          AVAILABLE_DIRECTIONS.N.incrementValue
+        ),
         status: getDroneStatus(initialYCoordinate, gridSize.y)
       };
     case "E":
       return {
         ...droneCoordinates,
-        x: getDroneCoordinate(initalXCoordinate, gridSize.x, 1),
+        x: getDroneCoordinate(
+          initalXCoordinate,
+          gridSize.x,
+          AVAILABLE_DIRECTIONS.E.incrementValue
+        ),
         status: getDroneStatus(initalXCoordinate, gridSize.x)
       };
     case "S":
       return {
         ...droneCoordinates,
-        y: getDroneCoordinate(initialYCoordinate, 0, -1),
+        y: getDroneCoordinate(
+          initialYCoordinate,
+          0,
+          AVAILABLE_DIRECTIONS.S.incrementValue
+        ),
         status: getDroneStatus(initialYCoordinate, 0)
       };
     case "W":
       return {
         ...droneCoordinates,
-        x: getDroneCoordinate(initalXCoordinate, 0, -1),
+        x: getDroneCoordinate(
+          initalXCoordinate,
+          0,
+          AVAILABLE_DIRECTIONS.W.incrementValue
+        ),
         status: getDroneStatus(initalXCoordinate, 0)
       };
   }
