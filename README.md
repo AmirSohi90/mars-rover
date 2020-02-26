@@ -13,6 +13,8 @@ To start type in CLI npm run start or yarn start
 <br><br>
 To run tests type in CLI npm run start or yarn start
 <br><br>
+It's running on port 3000 so go to localhost:3000 in the browser
+<br><br>
 Please note that I didn't include webpack/babel in this so it's best to run via Chrome
 
 # Comments on Code
